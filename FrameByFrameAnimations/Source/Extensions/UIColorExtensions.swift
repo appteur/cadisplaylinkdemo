@@ -9,11 +9,9 @@
 import Foundation
 import UIKit
 
-extension UIColor
-{
+extension UIColor {
 
-    class func colorFromHex(_ rgb: Int, alpha: CGFloat) -> UIColor
-    {
+    class func colorFromHex(_ rgb: Int, alpha: CGFloat) -> UIColor {
         let red = CGFloat(Float(((rgb>>16) & 0xFF)) / 255.0)
         let green = CGFloat(Float(((rgb>>8) & 0xFF)) / 255.0)
         let blue = CGFloat(Float(((rgb>>0) & 0xFF)) / 255.0)

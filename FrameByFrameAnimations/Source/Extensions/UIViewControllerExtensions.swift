@@ -9,23 +9,16 @@
 import Foundation
 import  UIKit
 
-extension UIViewController
-{
-    func actionDismiss(sender:AnyObject?)
-    {
-        if self.navigationController != nil
-        {
-            if navigationController?.presentingViewController != nil, navigationController?.viewControllers.count == 1
-            {
+extension UIViewController {
+    
+    func actionDismiss(sender: AnyObject?) {
+        if navigationController != nil {
+            if navigationController?.presentingViewController != nil, navigationController?.viewControllers.count == 1 {
                 navigationController?.presentingViewController?.dismiss(animated: true, completion: nil)
-            }
-            else
-            {
+            } else {
                 let _ = navigationController?.popViewController(animated: true)
             }
-        }
-        else if presentingViewController != nil
-        {
+        } else if presentingViewController != nil {
             presentingViewController?.dismiss(animated: true, completion: nil)
         }
     }
@@ -33,13 +26,12 @@ extension UIViewController
     
     // MARK: View Controller Containment convenience functions
     
-    func addChild(child:UIViewController, toView: UIView, frame:CGRect, animationDuration:TimeInterval = 0.3, index:Int? = nil)
-    {
+    func addChild(child: UIViewController, toView: UIView, frame: CGRect, animationDuration: TimeInterval = 0.3, index: Int? = nil) {
         // notify child of containment
         child.willMove(toParentViewController: self)
         
         // add content as child
-        self.addChildViewController(child)
+        addChildViewController(child)
         
         // set frame of child content
         child.view.frame = frame
@@ -73,7 +65,7 @@ extension UIViewController
     func remove(fromParentWithAnimationDuration animationDuration:TimeInterval) {
         if animationDuration <= 0 {
             // handle without animation here
-            self.view.alpha = 0.0
+            view.alpha = 0.0
             willMove(toParentViewController: nil)
             view.removeFromSuperview()
             removeFromParentViewController()
@@ -99,9 +91,7 @@ extension UIViewController
     func showAlert(title:String, message:String) {
         DispatchQueue.main.async {
             let alert = UIAlertController.init(title: title, message: message, preferredStyle: .alert)
-            
             let ok = UIAlertAction.init(title: "OK", style: .cancel, handler: nil)
-            
             alert.addAction(ok)
             self.present(alert, animated: true, completion: nil)
         }

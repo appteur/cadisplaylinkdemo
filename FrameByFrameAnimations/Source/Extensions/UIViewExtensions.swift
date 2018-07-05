@@ -9,40 +9,38 @@
 import UIKit
 
 
-extension UIView
-{
+extension UIView {
     /**
         Captures the layer of just this view and renders to image.
      */
-    func snapshotImage()->UIImage
-    {
-        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
-        self.layer.render(in: UIGraphicsGetCurrentContext()!)
+    func snapshotImage() -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(bounds.size, false, UIScreen.main.scale)
+        layer.render(in: UIGraphicsGetCurrentContext()!)
         let copied = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return copied!
+        return copied
     }
     
     /**
         Captures view and subviews in an image
      */
-    func snapshotViewHierarchy()->UIImage
-    {
-        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
-        self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
+    func snapshotViewHierarchy() -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(bounds.size, false, UIScreen.main.scale)
+        self.drawHierarchy(in: bounds, afterScreenUpdates: true)
         let copied = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return copied!
+        return copied
     }
     
     /**
         Captures and returns full view hierarchy as png data
      */
-    func snapshotData() -> Data?
-    {
-        let pngData = UIImagePNGRepresentation(self.snapshotViewHierarchy())
-        return pngData
+    func snapshotData() -> Data? {
+        guard let image = snapshotViewHierarchy() else {
+            return nil
+        }
+        return UIImagePNGRepresentation(image)
     }
 }

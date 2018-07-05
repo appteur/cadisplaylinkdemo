@@ -26,7 +26,7 @@ class ViewController: UIViewController, DisplayUpdateReceiver {
 
     func displayWillUpdate(deltaTime: CFTimeInterval) {
         
-        _ = animView?.update(deltaTime: deltaTime)
+        animView?.update(deltaTime: deltaTime)
         
         if animView?.isReadyForReuse == true {
             animView?.reset(center: CGPoint.init(x: CGFloat.random(low: 20.0, high: 300.0), y: CGFloat.random(low: 20.0, high: 700.0)))

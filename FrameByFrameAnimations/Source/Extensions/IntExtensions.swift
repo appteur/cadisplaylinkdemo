@@ -1,19 +1,12 @@
 //
-//  extension_cgfloat.swift
-//  kidoodle
+//  IntExtensions.swift
+//  FrameByFrameAnimations
 //
-//  Created by Seth on 7/5/17.
-//  Copyright © 2017 Arnott Industries Inc. All rights reserved.
+//  Created by Seth on 7/5/18.
+//  Copyright © 2018 Seth. All rights reserved.
 //
 
-import UIKit
-
-extension CGFloat {
-    
-    static func random(low: CGFloat, high: CGFloat) -> CGFloat {
-        return CGFloat(arc4random()) / CGFloat(UINT32_MAX) * Swift.abs(low - high) + CGFloat.minimum(low, high)
-    }
-}
+import Foundation
 
 extension Int {
     
@@ -23,6 +16,4 @@ extension Int {
         // operation can have a negative output
         return  Int(arc4random_uniform(UInt32(range.upperBound - range.lowerBound))) + range.lowerBound
     }
-    
-    
 }

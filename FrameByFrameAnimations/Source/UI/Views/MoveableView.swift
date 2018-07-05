@@ -26,6 +26,7 @@ class MoveableView: UIView, RandomMoveable {
     ///
     /// - Parameter center: The center point for this view. This will be the location where this view will appear once it is added to a superview.
     func reset(center: CGPoint = .zero) {
+        
         // don't reset until the transform animation has finished
         guard isReadyForReuse == true else {
             return
@@ -58,6 +59,7 @@ class MoveableView: UIView, RandomMoveable {
     
     /// sets or resets velocity/acceleration & time limit
     internal func configureMovement() {
+        
         // define the limits for our random numbers that define the velocity & acceleration values for animating onscreen.
         let low: CGFloat = -100.0
         let high: CGFloat = 100.0
@@ -78,7 +80,10 @@ class MoveableView: UIView, RandomMoveable {
     ///
     /// - Parameter deltaTime: Passed in from our display link wrapper. Represents the framerate by which we calculate a new position for smooth movement. The hard value is the difference in time between the last frame timestamp and the current frame timestamp. At 60 frames/second this value is ~0.01666.
     /// - Returns: Returns true if the update was performed successfully, else false. (False means either we ran past our animation time limit or this view has been flagged for recycling/reuse)
+    @discardableResult
     func update(deltaTime: CFTimeInterval) -> Bool {
+        
+        // validate
         guard canAnimate == true, isReadyForReuse == false else {
             return false
         }
@@ -93,8 +98,14 @@ class MoveableView: UIView, RandomMoveable {
         // update center with smoothed velocity
         center.adding(point: smoothVel)
         
+        // take the superview bounds and add padding the width of our animateable view
+        // so it can travel completely offscreen before being removed from the view, if
+        // you want it to 'bounce' off the edges of the screen remove the 'adding(padding:)
+        // call below
+        let isVisible = superview?.bounds.adding(padding: bounds.width).contains(frame)
+        
         currentTime += 0.01
-        if currentTime >= timeLimit {
+        if currentTime >= timeLimit || isVisible == false {
             canAnimate = false
             endAnimation()
             return false
@@ -105,8 +116,8 @@ class MoveableView: UIView, RandomMoveable {
     
     /// Performs a small scale transform then removes from superview and flags as ready for reuse so it will not receive update notifications. Called by update(:) when the animation has run past it's time limit.
     func endAnimation() {
-        UIView.animate(withDuration: 0.1, animations: { [weak self] _ in
-            self?.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
+        UIView.animate(withDuration: 0.1, animations: {
+            self.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
         }) { [weak self] (finished) in
             self?.removeFromSuperview()
             self?.isReadyForReuse = true

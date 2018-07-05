@@ -10,7 +10,7 @@ import UIKit
 
 
 /// Defines an interface for an object that manages it's movement when receiving update calls.
-protocol RandomMoveable {
+protocol RandomMoveable: class {
     var center: CGPoint { get set }
     var velocity: CGPoint { get set }
     var acceleration: CGPoint { get set }
@@ -31,7 +31,7 @@ extension RandomMoveable where Self: UIView {
     ///
     /// - Parameter deltaTime: The difference in time between the last display update call and the current call
     /// - Returns: Returns true if update is successful, else false.
-    mutating func update(deltaTime: CFTimeInterval) -> Bool {
+    func update(deltaTime: CFTimeInterval) -> Bool {
         guard canAnimate == true, isReadyForReuse == false else {
             return false
         }
@@ -54,12 +54,12 @@ extension RandomMoveable where Self: UIView {
     
     
     /// Default implementation to end an animation when it's time expires.
-    mutating func endAnimation() {
-        UIView.animate(withDuration: 0.1, animations: { [weak self] _ in
-            self?.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
-        }) { [weak self] (finished) in
-            self?.removeFromSuperview()
-            self?.isReadyForReuse = true
+    func endAnimation() {
+        UIView.animate(withDuration: 0.1, animations: {
+            self.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
+        }) { (finished) in
+            self.removeFromSuperview()
+            self.isReadyForReuse = true
         }
     }
 }
